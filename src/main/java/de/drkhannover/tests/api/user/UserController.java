@@ -33,7 +33,8 @@ import de.drkhannover.tests.api.user.dto.UserDto;
 import de.drkhannover.tests.api.user.exceptions.MissingDataException;
 import de.drkhannover.tests.api.user.exceptions.UserEditException;
 import de.drkhannover.tests.api.user.jpa.User;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * @author Marcel
@@ -46,6 +47,7 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PutMapping(ControllerPath.USERS_PREFIX)
 	public UserDto addLocalUser(@RequestBody @NotNull @Valid NewUserDto newUserDto) throws UserEditException {
 		@Nonnull String username = notNull(newUserDto.username); // spring validation
@@ -63,7 +65,8 @@ public class UserController {
 	}
 
 	@PatchMapping(ControllerPath.USERS_PREFIX + "/{username}")
-	public UserDto editLocalUser(@RequestBody @NotNull @Nonnull @Valid UserDto userDto, @ApiIgnore @Nullable Authentication auth,
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
+	public UserDto editLocalUser(@RequestBody @NotNull @Nonnull @Valid UserDto userDto, @Nullable Authentication auth,
 			@PathVariable("username") String usernamePath) throws MissingDataException, UsernameNotFoundException, AccessViolationException {
 		if (auth == null) {
 			throw new InternalError("Authentication not received");
@@ -95,6 +98,7 @@ public class UserController {
 		}
 	}
 
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	public UserRole authorityToRole(Collection<? extends GrantedAuthority> collection) {
 		var singleAuthy = (GrantedAuthority) collection.toArray()[0];
 		if (singleAuthy.getAuthority().equals("ROLE_ADMIN")) {
@@ -103,16 +107,18 @@ public class UserController {
 		return UserRole.DEFAULT;
 	}
 
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(ControllerPath.USERS_PREFIX)
 	public UserDto[] getAllUsers() {
 		var list = userService.findUsers();
 		var dtoArray = new UserDto[list.size()];
-		for (int i = 0; i < list.size() - 1; i++) {
+		for (int i = 0; i < list.size(); i++) {
 			dtoArray[i] = User.userAsDto(list.get(i));
 		}
 		return dtoArray;
 	}
 
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(ControllerPath.USERS_PREFIX + "/{username}")
 	public UserDto getAllUsers(@PathVariable("username") String username) {
 		var user = userService.findUserByUsername(username);

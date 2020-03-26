@@ -15,7 +15,8 @@ import de.drkhannover.tests.api.conf.ControllerPath;
 import de.drkhannover.tests.api.user.IUserService;
 import de.drkhannover.tests.api.user.dto.UserDto;
 import de.drkhannover.tests.api.user.jpa.User;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 /**
  * Controller for authentication
@@ -49,7 +50,8 @@ public class AuthController {
      * @return user information which are stored in the jwt token
      */
     @GetMapping(value = ControllerPath.AUTHENTICATION_CHECK) 
-    public UserDto isTokenValid(@ApiIgnore @Nonnull Authentication auth) {
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    public UserDto isTokenValid(@Nonnull Authentication auth) {
     	String username = auth.getPrincipal().toString();
     	var user = userService.findUserByUsername(username);
     	var dto = User.userAsDto(user);

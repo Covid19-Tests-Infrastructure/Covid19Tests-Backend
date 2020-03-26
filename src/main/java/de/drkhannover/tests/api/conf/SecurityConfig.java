@@ -65,9 +65,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers(ControllerPath.SWAGGER).permitAll()
             .antMatchers(ControllerPath.AUTHENTICATION_AUTH).permitAll()
-            .antMatchers(ControllerPath.USER_ADD).hasRole(UserRole.ADMIN.name()) // admin: allowed to add users
+            .antMatchers(ControllerPath.USERS_PREFIX).hasRole(UserRole.ADMIN.name()) // admin: allowed to add users
             .antMatchers(ControllerPath.AUTHENTICATION_CHECK).authenticated()
-            //.antMatchers("/**").permitAll()//maybe remove later
+            .antMatchers("/**").permitAll()//maybe remove later
             .anyRequest().authenticated()
             .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), confValues))

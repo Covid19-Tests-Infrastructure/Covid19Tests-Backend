@@ -8,7 +8,7 @@
 	<name>DRK Covid19 Api</name>
 
 	<properties>
-		<swagger.version>2.9.1</swagger.version>
+		<swagger.version>2.9.2</swagger.version>
 		<spring-starter.version>2.2.5.RELEASE</spring-starter.version>
 		<main.class>de.drkhannover.tests.api.Covid19Tests</main.class>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -47,14 +47,14 @@
 			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${swagger.version}</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${swagger.version}</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-security</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -98,7 +98,7 @@
 			<artifactId>jsr305</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-        
+
 		<!-- TEST DEPENDENCIES -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

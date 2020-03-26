@@ -24,6 +24,15 @@ public class PersonalSettings {
     @Column
     private String facility;
     
+    public String lastname;
+    public String firstlame;
+    public String phoneNumber;
+    public String fax;
+    public String email;
+    public String addressStreet;
+    public String addressZip;
+    public String addressOrt;
+    public String addressHnumber;
 
     public User getUser() {
         return user;

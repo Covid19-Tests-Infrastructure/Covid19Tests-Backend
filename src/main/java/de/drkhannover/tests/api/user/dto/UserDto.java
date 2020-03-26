@@ -23,6 +23,31 @@ public class UserDto implements Serializable {
         @NotBlank
         public String newPassword; 
     }
+    
+    /**
+     * Performs a transformation from DTO object to a StoredUserDetails. 
+     * 
+     * @param newUser valid DTO (username and password required)
+     * @return user with the values of the DTO
+     */
+    public static User transformToUser(@Nonnull UserDto userDto) {
+        String username = userDto.username;
+        String password = null;
+        if (userDto.passwordDto == null) {
+        	password = userDto.passwordDto.newPassword;
+        }
+        if (username != null && password != null) {
+            var user =  User.createDefaultUser(username, password);
+            user.setRole(userDto.role);
+            final var settings = userDto.settings;
+            if (settings != null) {                
+                SettingsDto.applyPersonalSettings(user, settings);
+            }
+            return user;
+        } else {
+            throw new IllegalArgumentException("The Userdto has null values which are not allowed");
+        }
+    }
 
     /**
      * Changes the values of the given user with values from the DTO. This happens recursive (it will
@@ -58,7 +83,7 @@ public class UserDto implements Serializable {
 
     private static void editUserFromDto(@Nonnull User databaseUser, @Nonnull UserDto userDto, boolean adminMode) {
         if (userDto.settings != null && userDto.username != null) {
-            databaseUser = SettingsDto.applyPersonalSettings(databaseUser, notNull(userDto.settings));
+            SettingsDto.applyPersonalSettings(databaseUser, notNull(userDto.settings));
             databaseUser.setUsername(notNull(userDto.username));
             boolean changePassword = userDto.passwordDto != null;
             boolean adminPassChange = adminMode && changePassword && userDto.passwordDto.newPassword != null;

@@ -26,6 +26,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import de.drkhannover.tests.api.form.dto.AddressDto;
+import de.drkhannover.tests.api.form.dto.FormDto;
 import de.drkhannover.tests.api.user.UserRole;
 import de.drkhannover.tests.api.user.dto.SettingsDto;
 import de.drkhannover.tests.api.user.dto.UserDto;
@@ -70,7 +72,21 @@ public class User implements UserDetails, GrantedAuthority {
 		dto.role = user.getRole();
 		dto.username = user.getUsername();
 		dto.settings = new SettingsDto();
-		dto.settings.facility = user.getProfileConfiguration().getFacility();
+		dto.settings.ordererInfo = new FormDto.OrdererDto();
+      	var orderer = dto.settings.ordererInfo;
+      	var dbSettings = user.getProfileConfiguration();
+      	dto.settings.facility = dbSettings.getFacility();
+      	orderer.address = new AddressDto();
+      	orderer.address.ort = dbSettings.addressOrt;
+      	orderer.address.hnumber = dbSettings.addressHnumber;
+      	orderer.address.zip = dbSettings.addressZip;
+      	orderer.address.street = dbSettings.addressStreet;
+      	orderer.bsnr = "";
+      	orderer.lanr = "";
+      	orderer.phoneNumber = dbSettings.phoneNumber;
+      	orderer.lastname = dbSettings.lastname;
+      	orderer.firstname = dbSettings.firstlame;
+      	orderer.fax = dbSettings.fax;
 		return dto;
 	}
 

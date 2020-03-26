@@ -10,7 +10,7 @@ public class FormDto {
 	public static class OrdererDto {
 		public String firstname;
 		public String lastname;
-		public String lsnr;
+		public String lanr;
 		public String bsnr;
 		public AddressDto address;
 		public String phoneNumber;

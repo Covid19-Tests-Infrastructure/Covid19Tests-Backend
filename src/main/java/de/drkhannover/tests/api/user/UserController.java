@@ -1,12 +1,11 @@
 package de.drkhannover.tests.api.user;
 
-import static de.drkhannover.tests.api.util.NullHelpers.notNull;
-
 import java.util.Collection;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.persistence.EnumType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.drkhannover.tests.api.auth.exceptions.AccessViolationException;
 import de.drkhannover.tests.api.conf.ControllerPath;
-import de.drkhannover.tests.api.user.dto.NewUserDto;
 import de.drkhannover.tests.api.user.dto.UserDto;
 import de.drkhannover.tests.api.user.exceptions.MissingDataException;
 import de.drkhannover.tests.api.user.exceptions.UserEditException;
@@ -49,12 +47,11 @@ public class UserController {
 
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@PutMapping(ControllerPath.USERS_PREFIX)
-	public UserDto addLocalUser(@RequestBody @NotNull @Valid NewUserDto newUserDto) throws UserEditException {
-		@Nonnull String username = notNull(newUserDto.username); // spring validation
-		@Nonnull String password = notNull(newUserDto.password); // spring validation
-		final var newUser = User.createDefaultUser(username, password);
-		newUser.setRole(newUserDto.role);
-		newUser.getProfileConfiguration().setFacility(newUserDto.getPersonalSettings().facility);
+	public UserDto addLocalUser(@RequestBody @NotNull @Valid UserDto newUserDto) throws UserEditException {
+		if (newUserDto.passwordDto == null) {
+			throw new UserEditException("Password is required for new users");
+		}
+		var newUser = UserDto.transformToUser(newUserDto);
 		if (!userService.isUserInDatabase(newUser)) {
 			userService.storeUser(newUser);
 			return User.userAsDto(newUser);
@@ -98,18 +95,22 @@ public class UserController {
 		}
 	}
 
-	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	public UserRole authorityToRole(Collection<? extends GrantedAuthority> collection) {
 		var singleAuthy = (GrantedAuthority) collection.toArray()[0];
-		if (singleAuthy.getAuthority().equals("ROLE_ADMIN")) {
-			return UserRole.ADMIN;
-		}
-		return UserRole.DEFAULT;
+		return EnumType.valueOf(UserRole.class, singleAuthy.getAuthority());
+//		if (singleAuthy.getAuthority().equals("ROLE_ADMIN")) {
+//			return UserRole.ADMIN;
+//		}
+//		return UserRole.DEFAULT;
 	}
 
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(ControllerPath.USERS_PREFIX)
-	public UserDto[] getAllUsers() {
+	public UserDto[] getAllUsers(Authentication auth) throws AccessViolationException {
+		var role = authorityToRole(auth.getAuthorities());
+		if (role != UserRole.ADMIN) {
+			throw new AccessViolationException("");
+		}
 		var list = userService.findUsers();
 		var dtoArray = new UserDto[list.size()];
 		for (int i = 0; i < list.size(); i++) {
@@ -120,9 +121,14 @@ public class UserController {
 
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
 	@GetMapping(ControllerPath.USERS_PREFIX + "/{username}")
-	public UserDto getAllUsers(@PathVariable("username") String username) {
-		var user = userService.findUserByUsername(username);
-		return User.userAsDto(user);
+	public UserDto getUser(@PathVariable("username") String username, Authentication auth) throws AccessViolationException {
+		var role = authorityToRole(auth.getAuthorities());
+		if (username.equals(auth.getPrincipal()) || role == UserRole.ADMIN) {
+			var user = userService.findUserByUsername(username);
+			return User.userAsDto(user);
+		} else {
+			throw new AccessViolationException("");
+		}
 	}
 
 	

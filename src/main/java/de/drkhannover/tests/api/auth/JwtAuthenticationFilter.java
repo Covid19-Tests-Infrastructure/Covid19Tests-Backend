@@ -1,5 +1,7 @@
 package de.drkhannover.tests.api.auth;
 
+import java.io.IOException;
+
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +45,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             var details = (UserDetails) principal;
             String token = JwtAuth.createJwtToken(details, confValues);
             response.addHeader(confValues.getJwtTokenHeader(), confValues.getJwtTokenPrefix() + " " + token);
+            try {
+				response.getWriter().write(confValues.getJwtTokenPrefix() + " " + token);
+				response.getWriter().flush();
+			} catch (IOException e) {
+
+			} finally {
+				try {
+					response.getWriter().close();
+				} catch (IOException e) {
+				}
+			}
+            
         }
     }
 }

@@ -36,7 +36,7 @@ public class AuthController {
      * @param password Password of the user
      */
     @PostMapping(value = ControllerPath.AUTHENTICATION_AUTH) 
-    public void authenticate(@RequestParam(value = "username") @NotNull String username, 
+    public String authenticate(@RequestParam(value = "username") @NotNull String username, 
                         @RequestParam(value = "password") @NotNull String password) {
         throw new UnsupportedOperationException();
     }

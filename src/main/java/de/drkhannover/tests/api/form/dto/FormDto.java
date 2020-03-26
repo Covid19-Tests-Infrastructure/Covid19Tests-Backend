@@ -10,6 +10,8 @@ public class FormDto {
 	public static class OrdererDto {
 		public String firstname;
 		public String lastname;
+		public String lsnr;
+		public String bsnr;
 		public AddressDto address;
 		public String phoneNumber;
 		public String fax;
@@ -17,7 +19,7 @@ public class FormDto {
 	}
 
 	public static class PatientDto {
-		public String berufsgruppe;
+		public String occupationGroup;
 		public String firstname;
 		public String lastname;
 		public String bday;

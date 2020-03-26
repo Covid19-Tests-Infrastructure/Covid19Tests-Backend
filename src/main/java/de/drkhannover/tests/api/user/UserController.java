@@ -44,16 +44,15 @@ public class UserController {
 	private IUserService userService;
 
 	@PutMapping(ControllerPath.USER_ADD)
-	public String addLocalUser(@RequestBody @NotNull @Valid NewUserDto newUserDto) throws UserEditException {
-		@Nonnull
-		String username = notNull(newUserDto.username); // spring validation
-		@Nonnull
-		String password = notNull(newUserDto.password); // spring validation
-
+	public UserDto addLocalUser(@RequestBody @NotNull @Valid NewUserDto newUserDto) throws UserEditException {
+		@Nonnull String username = notNull(newUserDto.username); // spring validation
+		@Nonnull String password = notNull(newUserDto.password); // spring validation
 		final var newUser = User.createDefaultUser(username, password);
+		newUser.setRole(newUserDto.role);
+		newUser.getProfileConfiguration().setFacility(newUserDto.getPersonalSettings().facility);
 		if (!userService.isUserInDatabase(newUser)) {
 			userService.storeUser(newUser);
-			return newUser.toString(); // TODO
+			return User.userAsDto(newUser);
 		} else {
 			log.info("No user added: Duplicate entry");
 			throw new UserEditException("Can't add user: Already existing");
@@ -61,7 +60,7 @@ public class UserController {
 	}
 
 	@PutMapping(ControllerPath.USER_EDIT)
-	public void editLocalUser(@RequestBody @NotNull @Nonnull @Valid UserDto userDto, @ApiIgnore @Nullable Authentication auth)
+	public UserDto editLocalUser(@RequestBody @NotNull @Nonnull @Valid UserDto userDto, @ApiIgnore @Nullable Authentication auth)
 			throws MissingDataException, UsernameNotFoundException, AccessViolationException {
 		if (auth == null) {
 			throw new InternalError("Authentication not received");
@@ -81,6 +80,7 @@ public class UserController {
 			} else if (selfEdit) {
 				UserDto.defaultUserDtoEdit(authenticatedUser, userDto);
 				userService.storeUser(authenticatedUser);
+				return User.userAsDto(authenticatedUser);
 			} else {
 				log.warn("User " + username + " tries to modify data of " + userDto.username);
 				throw new AccessViolationException("Could not edit other users data");
@@ -90,6 +90,7 @@ public class UserController {
 			throw new UsernameNotFoundException("Could not edit user, reason: " + e.getMessage() + ". Maybe our databse"
 					+ " is offline or the logged in user was deleted.");
 		}
+		return new UserDto();
 	}
 
 	public UserRole authorityToRole(Collection<? extends GrantedAuthority> collection) {
@@ -97,6 +98,7 @@ public class UserController {
 		return Enum.valueOf(UserRole.class, singleAuthy.getAuthority());
 	}
 
+	
 //    @GetMapping("/user/delete")
 
 	@ResponseStatus(code = HttpStatus.FORBIDDEN)

@@ -63,6 +63,8 @@ public class User implements UserDetails, GrantedAuthority {
 		return newUser;
 	}
 
+	User() {}
+
 	/**
 	 * Unique identifier (primary key) for local user.
 	 */

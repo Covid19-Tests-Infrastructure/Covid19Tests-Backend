@@ -1,5 +1,7 @@
 package de.drkhannover.tests.api.user;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
@@ -75,5 +77,15 @@ public class UserServiceImpl implements IUserService {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<User> findUsers() {
+		var list = new ArrayList<User>();
+		Iterable<User> optList = repository.findAll();
+		for (User user : optList) {
+			list.add(user);
+		}
+		return list;
 	}
 }

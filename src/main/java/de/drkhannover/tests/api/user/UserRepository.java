@@ -10,4 +10,5 @@ import de.drkhannover.tests.api.user.jpa.User;
 @Repository
 interface UserRepository extends CrudRepository<User, Integer>{
     Optional<User> findByusername(String username);
+    Iterable<User> findAll();
 }

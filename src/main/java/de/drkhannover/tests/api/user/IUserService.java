@@ -1,5 +1,7 @@
 package de.drkhannover.tests.api.user;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -36,6 +38,13 @@ public interface IUserService extends UserDetailsService {
     @Nonnull User findUserById(int id) throws UsernameNotFoundException;
     
     @Nonnull User findUserByUsername(@Nullable String username) throws UsernameNotFoundException;
+
+    /**
+     * Finds all users in the database.
+     * 
+     * @return List of user, may be empty
+     */
+    @Nonnull List<User> findUsers();
 
     /**
      * Checks if the given user is already stored in the used data storage. This could used as an indicator if the 

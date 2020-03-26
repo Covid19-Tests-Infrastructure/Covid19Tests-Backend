@@ -27,6 +27,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import de.drkhannover.tests.api.user.UserRole;
+import de.drkhannover.tests.api.user.dto.SettingsDto;
+import de.drkhannover.tests.api.user.dto.UserDto;
 
 @Entity
 @Table(name = "users")
@@ -63,7 +65,17 @@ public class User implements UserDetails, GrantedAuthority {
 		return newUser;
 	}
 
-	User() {}
+	public static @Nonnull UserDto userAsDto(User user) {
+		var dto = new UserDto();
+		dto.role = user.getRole();
+		dto.username = user.getUsername();
+		dto.settings = new SettingsDto();
+		dto.settings.facility = user.getProfileConfiguration().getFacility();
+		return dto;
+	}
+
+	@SuppressWarnings("unused") // spring
+	private User() {}
 
 	/**
 	 * Unique identifier (primary key) for local user.

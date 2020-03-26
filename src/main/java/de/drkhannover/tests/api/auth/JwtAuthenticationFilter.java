@@ -30,6 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         var userDetails = JwtAuth.extractCredentialsFromHttpRequest(request);
+        log.debug("Authentication attempt");
         return authenticationManager.authenticate(userDetails);
     }
 

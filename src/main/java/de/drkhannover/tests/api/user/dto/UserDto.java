@@ -61,7 +61,7 @@ public class UserDto implements Serializable {
             databaseUser = SettingsDto.applyPersonalSettings(databaseUser, notNull(userDto.settings));
             databaseUser.setUsername(notNull(userDto.username));
             boolean changePassword = userDto.passwordDto != null;
-            boolean adminPassChange = adminMode && userDto.passwordDto.newPassword != null;
+            boolean adminPassChange = adminMode && changePassword && userDto.passwordDto.newPassword != null;
             if (changePassword) {
                 defaultApplyNewPasswordFromDto(databaseUser, userDto.passwordDto);
             } else if (adminPassChange) {

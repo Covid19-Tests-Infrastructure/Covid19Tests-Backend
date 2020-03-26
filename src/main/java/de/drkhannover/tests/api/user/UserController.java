@@ -18,6 +18,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -43,7 +46,7 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 
-	@PutMapping(ControllerPath.USER_ADD)
+	@PutMapping(ControllerPath.USERS_PREFIX)
 	public UserDto addLocalUser(@RequestBody @NotNull @Valid NewUserDto newUserDto) throws UserEditException {
 		@Nonnull String username = notNull(newUserDto.username); // spring validation
 		@Nonnull String password = notNull(newUserDto.password); // spring validation
@@ -59,43 +62,61 @@ public class UserController {
 		}
 	}
 
-	@PutMapping(ControllerPath.USER_EDIT)
-	public UserDto editLocalUser(@RequestBody @NotNull @Nonnull @Valid UserDto userDto, @ApiIgnore @Nullable Authentication auth)
-			throws MissingDataException, UsernameNotFoundException, AccessViolationException {
+	@PatchMapping(ControllerPath.USERS_PREFIX + "/{username}")
+	public UserDto editLocalUser(@RequestBody @NotNull @Nonnull @Valid UserDto userDto, @ApiIgnore @Nullable Authentication auth,
+			@PathVariable("username") String usernamePath) throws MissingDataException, UsernameNotFoundException, AccessViolationException {
 		if (auth == null) {
 			throw new InternalError("Authentication not received");
 		}
-		String username = Optional.ofNullable(auth.getPrincipal()).orElse("").toString();
-		boolean selfEdit = username.equals(userDto.username);
+		String authenticatedUserName = Optional.ofNullable(auth.getPrincipal()).orElse("").toString();
+		boolean selfEdit = authenticatedUserName.equals(usernamePath);
 		UserRole role = authorityToRole(auth.getAuthorities());
 
 		try {
-			if (username.isBlank()) {
+			if (authenticatedUserName.isBlank() || usernamePath.isBlank()) {
 				log.warn("Unknown user type is logged in: " + auth.getPrincipal().toString());
 				throw new AccessViolationException("User not known.");
 			}
-			User authenticatedUser = userService.findUserByUsername(username);
+			User userToEdit = userService.findUserByUsername(usernamePath);
 			if (role == UserRole.ADMIN) {
-				UserDto.adminUserDtoEdit(authenticatedUser, userDto);
+				UserDto.adminUserDtoEdit(userToEdit, userDto);
 			} else if (selfEdit) {
-				UserDto.defaultUserDtoEdit(authenticatedUser, userDto);
-				userService.storeUser(authenticatedUser);
-				return User.userAsDto(authenticatedUser);
+				UserDto.defaultUserDtoEdit(userToEdit, userDto);
 			} else {
-				log.warn("User " + username + " tries to modify data of " + userDto.username);
+				log.warn("User " + authenticatedUserName + " tries to modify data of " + usernamePath);
 				throw new AccessViolationException("Could not edit other users data");
 			}
+			userService.storeUser(userToEdit);
+			return User.userAsDto(userToEdit);
 		} catch (UsernameNotFoundException e) {
-			log.info("User is logged  in but no data is in the database. Maybe database is down?");
-			throw new UsernameNotFoundException("Could not edit user, reason: " + e.getMessage() + ". Maybe our databse"
-					+ " is offline or the logged in user was deleted.");
+			log.info("A user which is not in the database was editied ");
+			throw new UsernameNotFoundException("Could not edit user, : " + e.getMessage() + ". Maybe our database"
+					+ " is offline or the user was deleted.");
 		}
-		return new UserDto();
 	}
 
 	public UserRole authorityToRole(Collection<? extends GrantedAuthority> collection) {
 		var singleAuthy = (GrantedAuthority) collection.toArray()[0];
-		return Enum.valueOf(UserRole.class, singleAuthy.getAuthority());
+		if (singleAuthy.getAuthority().equals("ROLE_ADMIN")) {
+			return UserRole.ADMIN;
+		}
+		return UserRole.DEFAULT;
+	}
+
+	@GetMapping(ControllerPath.USERS_PREFIX)
+	public UserDto[] getAllUsers() {
+		var list = userService.findUsers();
+		var dtoArray = new UserDto[list.size()];
+		for (int i = 0; i < list.size() - 1; i++) {
+			dtoArray[i] = User.userAsDto(list.get(i));
+		}
+		return dtoArray;
+	}
+
+	@GetMapping(ControllerPath.USERS_PREFIX + "/{username}")
+	public UserDto getAllUsers(@PathVariable("username") String username) {
+		var user = userService.findUserByUsername(username);
+		return User.userAsDto(user);
 	}
 
 	

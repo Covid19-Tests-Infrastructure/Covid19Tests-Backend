@@ -17,17 +17,32 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.drkhannover.tests.api.conf.ConfigurationValues;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 public class JwtAuth {
+	static class Credentials {
+		public String password;
+		public String username;
+	}
     private JwtAuth() {}
 
     public static UsernamePasswordAuthenticationToken extractCredentialsFromHttpRequest(HttpServletRequest request) {
-        var username = request.getParameter("username");
-        var password = request.getParameter("password");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        if (username == null && password == null) {
+        	try {
+        		Credentials cred = new ObjectMapper().readValue(request.getInputStream(), Credentials.class); 
+        	    username = cred.username;
+        		password = cred.password;
+        	} catch (java.io.IOException e) {
+        		throw new RuntimeException(e);
+        	}
+        }
         return new UsernamePasswordAuthenticationToken(username, password);
     }
 

@@ -12,6 +12,6 @@ public class ControllerPath {
     public static final String USER_ADD = USER_PREFIX + "/add";
     public static final String USER_EDIT = USER_PREFIX + "/edit";
     
-    public static final String AUTHENTICATION_AUTH = GLOBAL_PREFIX + "/authentication";
+    public static final String AUTHENTICATION_AUTH = GLOBAL_PREFIX + "/authenticate";
     public static final String AUTHENTICATION_CHECK = AUTHENTICATION_AUTH + "/check";
 }

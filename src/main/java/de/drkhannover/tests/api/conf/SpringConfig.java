@@ -1,5 +1,7 @@
 package de.drkhannover.tests.api.conf;
 
+import java.util.Arrays;
+
 import javax.validation.Validator;
 
 import org.springframework.context.annotation.Bean;
@@ -22,8 +24,15 @@ public class SpringConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-		return source;
+        final CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(("*")));
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
+        return source;
+		//source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		//return source;
 	}
 
 	@Bean

@@ -22,24 +22,6 @@ import de.drkhannover.tests.api.user.UserServiceImpl;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Value("${ldap.urls}")
-    private String ldapUrls;
-    
-    @Value("${ldap.base.dn}")
-    private String ldapBaseDn;
-    
-    @Value("${ldap.username}")
-    private String ldapSecurityPrincipal;
-    
-    @Value("${ldap.password}")
-    private String ldapPrincipalPassword;
-    
-    @Value("${ldap.user.dn.pattern}")
-    private String ldapUserDnPattern;
-    
-    @Value("${ldap.enabled}")
-    private String ldapEnabled;
-
     @Value("${recovery.enabled}")
     private String inMemoryEnabled;
     

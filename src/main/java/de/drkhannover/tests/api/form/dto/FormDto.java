@@ -1,10 +1,18 @@
 package de.drkhannover.tests.api.form.dto;
 
+import javax.validation.constraints.NotNull;
+
 import de.drkhannover.tests.api.form.RKICriteria;
 
 public class FormDto {
+	
+	@NotNull
 	public OrdererDto orderer;
+	
+	@NotNull
 	public PatientDto patient;
+
+	@NotNull
 	public Covid19Info info;
 	
 	public static class OrdererDto {

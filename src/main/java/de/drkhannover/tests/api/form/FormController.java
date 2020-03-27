@@ -41,6 +41,7 @@ public class FormController {
 		builder.append("OrdererPhoneNumber: " + formValues.orderer.phoneNumber + "\n");
 		builder.append("OrdererFax: " + formValues.orderer.fax + "\n");
 		builder.append("OrdererEmail: " + formValues.orderer.email + "\n");
+		builder.append("PatientOccupation: " + formValues.patient.occupationGroup + "\n");
 		builder.append("PatientVorname: " + formValues.patient.firstname + "\n");
 		builder.append("PatientLastname: " + formValues.patient.lastname + "\n");
 		builder.append("PatientBday: " + formValues.patient.bday + "\n");

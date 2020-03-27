@@ -52,6 +52,7 @@ public class FormController {
 		builder.append("PatientHealthCareNumber: " + formValues.patient.personalHealthCareNumber + "\n");
 		builder.append("PatientPhoneNumber: " + formValues.patient.phoneNumber + "\n");
 		builder.append("PatientInsuranceType: " + formValues.patient.insuranceType + "\n");
+		builder.append("PatientMobilityState: " + formValues.patient.mobile + "\n");
 		builder.append("C19InfoDiagnose: " + formValues.info.diagnose + "\n");
 		builder.append("C19InfoCriteria: " + formValues.info.rkiCrit + "\n");
 		builder.append("C19InfoReason: " + formValues.info.rkiReason + "\n");

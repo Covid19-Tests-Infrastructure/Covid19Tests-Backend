@@ -88,4 +88,20 @@ public class UserServiceImpl implements IUserService {
 		}
 		return list;
 	}
+
+	@Override
+	public void deleteUser(User user) {
+		if (user.getId() != 0) {
+			repository.deleteById(user.getId());
+		} else {
+			repository.delete(user);
+		}
+		
+	}
+
+	@Override
+	public void deleteUser(String username) {
+		var user = findUserByUsername(username);
+		deleteUser(user);
+	}
 }

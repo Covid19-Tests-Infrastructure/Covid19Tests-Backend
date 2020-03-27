@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -129,6 +130,17 @@ public class UserController {
 		if (username.equals(auth.getPrincipal()) || role == UserRole.ADMIN) {
 			var user = userService.findUserByUsername(username);
 			return user.asDto();
+		} else {
+			throw new AccessViolationException("");
+		}
+	}
+	
+	@Operation(security = { @SecurityRequirement(name = "bearer-key") })
+	@DeleteMapping(ControllerPath.USERS_PREFIX + "/{username}")
+	public void deleteUser(@PathVariable("username") String username, Authentication auth) throws AccessViolationException {
+		var role = authorityToRole(auth.getAuthorities());
+		if (username.equals(auth.getPrincipal()) || role == UserRole.ADMIN) {
+			userService.deleteUser(username);
 		} else {
 			throw new AccessViolationException("");
 		}

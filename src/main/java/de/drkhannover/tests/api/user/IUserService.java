@@ -64,4 +64,7 @@ public interface IUserService extends UserDetailsService {
      */
     @Override
     @Nonnull UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+    
+    void deleteUser(User user);
+    void deleteUser(String username);
 }

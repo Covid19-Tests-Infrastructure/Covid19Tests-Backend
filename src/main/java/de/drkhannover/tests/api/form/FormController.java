@@ -67,7 +67,9 @@ public class FormController {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(to);
 		message.setSubject(subject);
+		message.setFrom("covid19@drk-hannover.de");
 		message.setText(text);
+
 		emailSender.send(message);
 	}
 }

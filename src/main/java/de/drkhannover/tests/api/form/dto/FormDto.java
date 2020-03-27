@@ -40,6 +40,8 @@ public class FormDto {
 		@NotBlank
 		public String lastname;
 		@NotBlank
+		public String gender;
+		@NotBlank
 		public String bday;
 		public AddressDto address;
 		@NotBlank

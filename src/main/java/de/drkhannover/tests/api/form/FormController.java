@@ -44,6 +44,7 @@ public class FormController {
 		builder.append("PatientOccupation: " + formValues.patient.occupationGroup + "\n");
 		builder.append("PatientVorname: " + formValues.patient.firstname + "\n");
 		builder.append("PatientLastname: " + formValues.patient.lastname + "\n");
+		builder.append("PatientGender: + " + formValues.patient.gender + "\n");
 		builder.append("PatientBday: " + formValues.patient.bday + "\n");
 		builder.append("PatientStreet: " + formValues.patient.address.street + "\n");
 		builder.append("PatientHnumber: " + formValues.patient.address.hnumber + "\n");

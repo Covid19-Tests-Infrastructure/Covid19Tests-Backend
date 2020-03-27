@@ -19,6 +19,8 @@ public class SettingsDto {
         		dbSettings.addressZip = address.zip;
         		dbSettings.addressHnumber = address.hnumber;
         	}
+        	dbSettings.lanr = order.lanr;
+        	dbSettings.bsnr = order.bsnr;
         	dbSettings.email = order.email;
         	dbSettings.fax = order.fax;
         	dbSettings.firstlame = order.firstname;

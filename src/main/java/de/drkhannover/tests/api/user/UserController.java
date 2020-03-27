@@ -54,7 +54,7 @@ public class UserController {
 		var newUser = UserDto.transformToUser(newUserDto);
 		if (!userService.isUserInDatabase(newUser)) {
 			userService.storeUser(newUser);
-			return User.userAsDto(newUser);
+			return newUser.asDto();
 		} else {
 			log.info("No user added: Duplicate entry");
 			throw new UserEditException("Can't add user: Already existing");
@@ -87,7 +87,7 @@ public class UserController {
 				throw new AccessViolationException("Could not edit other users data");
 			}
 			userService.storeUser(userToEdit);
-			return User.userAsDto(userToEdit);
+			return userToEdit.asDto();
 		} catch (UsernameNotFoundException e) {
 			log.info("A user which is not in the database was editied ");
 			throw new UsernameNotFoundException("Could not edit user, : " + e.getMessage() + ". Maybe our database"
@@ -114,7 +114,7 @@ public class UserController {
 		var list = userService.findUsers();
 		var dtoArray = new UserDto[list.size()];
 		for (int i = 0; i < list.size(); i++) {
-			dtoArray[i] = User.userAsDto(list.get(i));
+			dtoArray[i] = list.get(i).asDto();
 		}
 		return dtoArray;
 	}
@@ -125,7 +125,7 @@ public class UserController {
 		var role = authorityToRole(auth.getAuthorities());
 		if (username.equals(auth.getPrincipal()) || role == UserRole.ADMIN) {
 			var user = userService.findUserByUsername(username);
-			return User.userAsDto(user);
+			return user.asDto();
 		} else {
 			throw new AccessViolationException("");
 		}

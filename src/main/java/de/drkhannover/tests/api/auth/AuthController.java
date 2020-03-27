@@ -54,7 +54,6 @@ public class AuthController {
     public UserDto isTokenValid(@Nonnull Authentication auth) {
     	String username = auth.getPrincipal().toString();
     	var user = userService.findUserByUsername(username);
-    	var dto = User.userAsDto(user);
-    	return dto;
+    	return user.asDto();
     }
 }

@@ -33,6 +33,8 @@ public class PersonalSettings {
     public String addressZip;
     public String addressOrt;
     public String addressHnumber;
+    public String lanr;
+    public String bsnr;
 
     public User getUser() {
         return user;

@@ -66,30 +66,6 @@ public class User implements UserDetails, GrantedAuthority {
 		newUser.encodeAndSetPassword(rawPassword);
 		return newUser;
 	}
-
-	public static @Nonnull UserDto userAsDto(User user) {
-		var dto = new UserDto();
-		dto.role = user.getRole();
-		dto.username = user.getUsername();
-		dto.settings = new SettingsDto();
-		dto.settings.ordererInfo = new FormDto.OrdererDto();
-      	var orderer = dto.settings.ordererInfo;
-      	var dbSettings = user.getProfileConfiguration();
-      	dto.settings.facility = dbSettings.getFacility();
-      	orderer.address = new AddressDto();
-      	orderer.address.ort = dbSettings.addressOrt;
-      	orderer.address.hnumber = dbSettings.addressHnumber;
-      	orderer.address.zip = dbSettings.addressZip;
-      	orderer.address.street = dbSettings.addressStreet;
-      	orderer.bsnr = "";
-      	orderer.lanr = "";
-      	orderer.phoneNumber = dbSettings.phoneNumber;
-      	orderer.lastname = dbSettings.lastname;
-      	orderer.firstname = dbSettings.firstlame;
-      	orderer.fax = dbSettings.fax;
-		return dto;
-	}
-
 	@SuppressWarnings("unused") // spring
 	private User() {}
 
@@ -300,5 +276,9 @@ public class User implements UserDetails, GrantedAuthority {
             encoder = new BCryptPasswordEncoder();
             return getEncoder();
         }
+    }
+    
+    public UserDto asDto() {
+    	return UserDto.transformToDto(this);
     }
 }

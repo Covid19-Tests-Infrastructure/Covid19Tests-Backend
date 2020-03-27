@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import de.drkhannover.tests.api.form.dto.AddressDto;
+import de.drkhannover.tests.api.form.dto.FormDto;
 import de.drkhannover.tests.api.user.UserRole;
 import de.drkhannover.tests.api.user.jpa.User;
 
@@ -25,10 +27,9 @@ public class UserDto implements Serializable {
     }
     
     /**
-     * Performs a transformation from DTO object to a StoredUserDetails. 
-     * 
-     * @param newUser valid DTO (username and password required)
-     * @return user with the values of the DTO
+     * Do not use - :(
+     * @param userDto
+     * @return
      */
     public static User transformToUser(@Nonnull UserDto userDto) {
         String username = userDto.username;
@@ -48,6 +49,30 @@ public class UserDto implements Serializable {
             throw new IllegalArgumentException("The Userdto has null values which are not allowed");
         }
     }
+    
+	public static @Nonnull UserDto transformToDto(User user) {
+		var dto = new UserDto();
+		dto.isActive = user.isActive();
+		dto.role = user.getRole();
+		dto.username = user.getUsername();
+		dto.settings = new SettingsDto();
+		dto.settings.ordererInfo = new FormDto.OrdererDto();
+      	var orderer = dto.settings.ordererInfo;
+      	var dbSettings = user.getProfileConfiguration();
+      	dto.settings.facility = dbSettings.getFacility();
+      	orderer.address = new AddressDto();
+      	orderer.address.ort = dbSettings.addressOrt;
+      	orderer.address.hnumber = dbSettings.addressHnumber;
+      	orderer.address.zip = dbSettings.addressZip;
+      	orderer.address.street = dbSettings.addressStreet;
+      	orderer.bsnr = "";
+      	orderer.lanr = "";
+      	orderer.phoneNumber = dbSettings.phoneNumber;
+      	orderer.lastname = dbSettings.lastname;
+      	orderer.firstname = dbSettings.firstlame;
+      	orderer.fax = dbSettings.fax;
+		return dto;
+	}
 
     /**
      * Changes the values of the given user with values from the DTO. This happens recursive (it will
@@ -85,6 +110,7 @@ public class UserDto implements Serializable {
         if (userDto.settings != null && userDto.username != null) {
             SettingsDto.applyPersonalSettings(databaseUser, notNull(userDto.settings));
             databaseUser.setUsername(notNull(userDto.username));
+            databaseUser.setActive(userDto.isActive);
             boolean changePassword = userDto.passwordDto != null;
             boolean adminPassChange = adminMode && changePassword && userDto.passwordDto.newPassword != null;
             if (changePassword) {
@@ -161,4 +187,6 @@ public class UserDto implements Serializable {
     public SettingsDto settings;
 
     public UserRole role;
+    
+    public boolean isActive;
 }

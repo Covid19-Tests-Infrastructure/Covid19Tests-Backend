@@ -67,6 +67,7 @@ public class UserDto implements Serializable {
       	orderer.address.street = dbSettings.addressStreet;
       	orderer.bsnr = dbSettings.bsnr;
       	orderer.lanr = dbSettings.lanr;
+      	orderer.email = dbSettings.email;
       	orderer.phoneNumber = dbSettings.phoneNumber;
       	orderer.lastname = dbSettings.lastname;
       	orderer.firstname = dbSettings.firstlame;

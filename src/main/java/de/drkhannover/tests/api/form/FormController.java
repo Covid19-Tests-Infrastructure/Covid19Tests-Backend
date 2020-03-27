@@ -55,7 +55,7 @@ public class FormController {
 		builder.append("C19InfoDiagnose: " + formValues.info.diagnose + "\n");
 		builder.append("C19InfoCriteria: " + formValues.info.rkiCrit + "\n");
 		builder.append("C19InfoReason: " + formValues.info.rkiReason + "\n");
-		sendSimpleMessage("m.spark@gmx.de", "Covid19", builder.toString());
+		sendSimpleMessage("covid19@drk-hannover.de", "CovidTestsKI", builder.toString());
 	}
 	
 	@Autowired

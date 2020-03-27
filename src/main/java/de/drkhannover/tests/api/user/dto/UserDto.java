@@ -34,7 +34,7 @@ public class UserDto implements Serializable {
     public static User transformToUser(@Nonnull UserDto userDto) {
         String username = userDto.username;
         String password = null;
-        if (userDto.passwordDto == null) {
+        if (userDto.passwordDto != null) {
         	password = userDto.passwordDto.newPassword;
         }
         if (username != null && password != null) {

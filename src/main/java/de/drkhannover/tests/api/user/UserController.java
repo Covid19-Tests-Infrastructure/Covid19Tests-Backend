@@ -97,11 +97,14 @@ public class UserController {
 
 	public UserRole authorityToRole(Collection<? extends GrantedAuthority> collection) {
 		var singleAuthy = (GrantedAuthority) collection.toArray()[0];
-		return EnumType.valueOf(UserRole.class, singleAuthy.getAuthority());
-//		if (singleAuthy.getAuthority().equals("ROLE_ADMIN")) {
-//			return UserRole.ADMIN;
-//		}
-//		return UserRole.DEFAULT;
+		if (singleAuthy.getAuthority().startsWith("ROLE_")) {
+			if (singleAuthy.getAuthority().equals("ROLE_ADMIN")) {
+				return UserRole.ADMIN;
+			}
+			return UserRole.DEFAULT;
+		} else {
+			return EnumType.valueOf(UserRole.class, singleAuthy.getAuthority());
+		}
 	}
 
 	@Operation(security = { @SecurityRequirement(name = "bearer-key") })

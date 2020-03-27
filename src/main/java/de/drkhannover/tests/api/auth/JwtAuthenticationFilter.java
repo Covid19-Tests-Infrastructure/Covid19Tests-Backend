@@ -46,6 +46,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             String token = JwtAuth.createJwtToken(details, confValues);
             response.addHeader(confValues.getJwtTokenHeader(), confValues.getJwtTokenPrefix() + " " + token);
             try {
+            	response.setContentType("text/html; charset=UTF-8"); 
 				response.getWriter().write(confValues.getJwtTokenPrefix() + " " + token);
 				response.getWriter().flush();
 			} catch (IOException e) {

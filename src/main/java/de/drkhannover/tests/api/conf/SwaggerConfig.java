@@ -1,4 +1,5 @@
 package de.drkhannover.tests.api.conf;
+import org.springframework.beans.factory.annotation.Value;
 //
 //import java.awt.print.Pageable;
 //import java.util.ArrayList;
@@ -36,11 +37,13 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 //@EnableSwagger2
 public class SwaggerConfig {
 	@Bean
-	 public OpenAPI customOpenAPI() {
+	 public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
 	   return new OpenAPI()
 	          .components(new Components()
 	          .addSecuritySchemes("bearer-key", 
-	          new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
+	          new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
+	          .info(new Info().title("Covid19 Tests API").version(appVersion));
+			   //.license(new License().name("Apache 2.0").url("http://springdoc.org")));;
 	}
 //
 //    public static final String AUTHORIZATION_HEADER = "Authorization";

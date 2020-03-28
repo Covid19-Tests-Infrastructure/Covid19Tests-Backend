@@ -66,7 +66,7 @@ public class JwtAuth {
                 .setIssuer(jwtConf.getJwtTokenIssuer())
                 .setAudience(jwtConf.getJwtTokenAudience())
                 .setSubject(user.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 864000000))
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .claim("rol", roles)
                 .compact();
             return notNull(token);

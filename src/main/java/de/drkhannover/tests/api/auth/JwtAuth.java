@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.drkhannover.tests.api.conf.ConfigurationValues;
+import de.drkhannover.tests.api.user.dto.TokenDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -80,12 +81,13 @@ public class JwtAuth {
         var username = parsedToken
             .getBody()
             .getSubject();
+        var expiration = parsedToken.getBody().getExpiration();
         var authorities = ((List<?>) parsedToken.getBody()
             .get("rol")).stream()
             .map(authority -> new SimpleGrantedAuthority((String) authority))
             .collect(Collectors.toList());
         if (!StringUtils.isEmpty(username)) {
-        	return new UsernamePasswordAuthenticationToken(username, null, authorities);
+        	return new UsernamePasswordAuthenticationToken(username, new TokenDto(token, expiration), authorities);
         } else {
         	return null;
         }

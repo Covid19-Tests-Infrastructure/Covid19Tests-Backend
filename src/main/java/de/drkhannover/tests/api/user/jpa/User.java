@@ -26,10 +26,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import de.drkhannover.tests.api.form.dto.AddressDto;
-import de.drkhannover.tests.api.form.dto.FormDto;
 import de.drkhannover.tests.api.user.UserRole;
-import de.drkhannover.tests.api.user.dto.SettingsDto;
 import de.drkhannover.tests.api.user.dto.UserDto;
 
 @Entity

@@ -9,6 +9,8 @@ public class ControllerPath {
     public static final String FORMULAR_PRIVATE = FORMULAR_PREFIX + "/default";
     public static final String FORMULAR_KVN = FORMULAR_PREFIX + "/kvn";
     
+    public static final String PRICE_GET = FORMULAR_PREFIX + "/price";
+    
     public static final String USER_PREFIX = GLOBAL_PREFIX + "/user";
     public static final String USER_ADD = USER_PREFIX + "/add";
     public static final String USER_EDIT = USER_PREFIX + "/edit";

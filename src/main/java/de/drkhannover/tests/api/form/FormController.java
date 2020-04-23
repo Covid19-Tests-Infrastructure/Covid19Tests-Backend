@@ -1,5 +1,10 @@
 package de.drkhannover.tests.api.form;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -25,9 +30,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class FormController {
+    public static class PriceDto {
+        public Map<String, Integer> priceList;
+    }
 
     @Autowired
     public IUserService userService;
+
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @PutMapping(ControllerPath.PRICE_GET)
+    public PriceDto getPrice() {
+        var p = new PriceDto();
+        p.priceList = new HashMap<String, Integer>();
+        p.priceList.put("single", 40);
+        return p;
+    }
 
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     @PutMapping(ControllerPath.FORMULAR_PRIVATE)

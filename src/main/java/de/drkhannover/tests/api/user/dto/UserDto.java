@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import de.drkhannover.tests.api.form.dto.AddressDto;
-import de.drkhannover.tests.api.form.dto.FormDto;
+import de.drkhannover.tests.api.form.dto.FormKvnDto;
 import de.drkhannover.tests.api.user.UserRole;
 import de.drkhannover.tests.api.user.jpa.User;
 
@@ -56,7 +56,7 @@ public class UserDto implements Serializable {
 		dto.role = user.getRole();
 		dto.username = user.getUsername();
 		dto.settings = new SettingsDto();
-		dto.settings.ordererInfo = new FormDto.OrdererDto();
+		dto.settings.ordererInfo = new FormKvnDto.OrdererDto();
       	var orderer = dto.settings.ordererInfo;
       	var dbSettings = user.getProfileConfiguration();
       	dto.settings.facility = dbSettings.getFacility();

@@ -3,7 +3,7 @@ package de.drkhannover.tests.api.user.dto;
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 
-import de.drkhannover.tests.api.form.dto.FormDto;
+import de.drkhannover.tests.api.form.dto.FormKvnDto;
 import de.drkhannover.tests.api.user.jpa.User;
 
 public class SettingsDto {
@@ -32,5 +32,5 @@ public class SettingsDto {
     
     @NotNull
     public String facility;
-    public FormDto.OrdererDto ordererInfo;
+    public FormKvnDto.OrdererDto ordererInfo;
 }

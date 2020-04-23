@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import de.drkhannover.tests.api.form.RKICriteria;
 
-public class FormDto {
+public class FormKvnDto {
 	public enum GENDER {M,W,D}
 	
 	@NotNull
@@ -34,25 +34,23 @@ public class FormDto {
 	}
 
 	public static class PatientDto {
-		@NotBlank
 		public String occupationGroup;
 		@NotBlank
 		public String firstname;
 		@NotBlank
 		public String lastname;
-		@NotBlank
+		@NotNull
 		public GENDER gender;
 		@NotBlank
 		public String bday;
+		@NotNull
 		public AddressDto address;
 		@NotBlank
 		public String phoneNumber;
 		public String healthCareOrganisationNumber;
-		@NotBlank
 		public String personalHealthCareNumber;
 		@NotBlank
 		public String insuranceType;
-		@NotBlank
 		public boolean mobile;
 	}
 	

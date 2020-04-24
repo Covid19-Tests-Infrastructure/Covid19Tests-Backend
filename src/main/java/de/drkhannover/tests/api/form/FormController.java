@@ -1,10 +1,5 @@
 package de.drkhannover.tests.api.form;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -30,21 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class FormController {
-    public static class PriceDto {
-        public Map<String, Integer> priceList;
-    }
-
     @Autowired
     public IUserService userService;
-
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
-    @PutMapping(ControllerPath.PRICE_GET)
-    public PriceDto getPrice() {
-        var p = new PriceDto();
-        p.priceList = new HashMap<String, Integer>();
-        p.priceList.put("single", 40);
-        return p;
-    }
 
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     @PutMapping(ControllerPath.FORMULAR_PRIVATE)
@@ -53,8 +35,18 @@ public class FormController {
         if (user.getProfileConfiguration().getFacility() == null) {
             throw new Error("User has no facility");
         }
+        var conf = user.getProfileConfiguration();
         var builder = new StringBuilder();
         builder.append("FacilityNr: " + user.getProfileConfiguration().getFacility() + "\n");
+        builder.append("OrdererFirstName: " + conf.firstlame + "\n");
+        builder.append("OrdererLastName: " + conf.lastname + "\n");
+        builder.append("OrdererStreet: " + conf.addressStreet+ "\n");
+        builder.append("OrdererHnumber: " + conf.addressHnumber+ "\n");
+        builder.append("OrdererZip: " + conf.addressZip + "\n");
+        builder.append("OrdererOrt: " + conf.addressOrt+ "\n");
+        builder.append("OrdererPhoneNumber: " + conf.phoneNumber + "\n");
+        builder.append("OrdererFax: " + conf.fax + "\n");
+        builder.append("OrdererEmail: " + conf.email + "\n");
         builder.append("PatientOccupation: " + patient.occupationGroup + "\n");
         builder.append("PatientVorname: " + patient.firstname + "\n");
         builder.append("PatientLastname: " + patient.lastname + "\n");
@@ -116,7 +108,6 @@ public class FormController {
         message.setSubject(subject);
         message.setFrom("covid19@drk-hannover.de");
         message.setText(text);
-
         emailSender.send(message);
     }
 

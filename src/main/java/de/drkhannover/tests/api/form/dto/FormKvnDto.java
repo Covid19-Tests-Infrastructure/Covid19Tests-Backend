@@ -49,7 +49,6 @@ public class FormKvnDto {
 		public String phoneNumber;
 		public String healthCareOrganisationNumber;
 		public String personalHealthCareNumber;
-		@NotBlank
 		public String insuranceType;
 		public boolean mobile;
 	}

@@ -96,6 +96,7 @@ public class FormController {
         builder.append("PatientMobilityState: " + formContent.mobile + "\n");
         builder.append("PatientAddressNote: " + formContent.testAddressNote + "\n");
         builder.append("Editor: " + formContent.editor + "\n");
+        builder.append("Comment: " + formContent.comment + "\n");
         builder.append("ContactSeverity: " + formContent.contactSeverity + "\n");
         sendSimpleMessage("covid19@drk-hannover.de", "CovidTests Default", builder.toString());
     }

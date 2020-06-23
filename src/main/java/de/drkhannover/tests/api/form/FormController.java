@@ -93,9 +93,11 @@ public class FormController {
         builder.append("PatientZip: " + formContent.address.zip + "\n");
         builder.append("PatientOrt: " + formContent.address.ort + "\n");
         builder.append("PatientPhoneNumber: " + formContent.phoneNumber + "\n");
-        builder.append("PatientInsuranceType: " + formContent.insuranceType + "\n");
         builder.append("PatientMobilityState: " + formContent.mobile + "\n");
-        sendSimpleMessage("covid19@drk-hannover.de", "CovidTests Default", builder.toString());
+        builder.append("PatientAddressNote: " + formContent.testAddressNote + "\n");
+        builder.append("Editor: " + formContent.editor + "\n");
+        builder.append("ContactSeverity: " + formContent.contactSeverity + "\n");
+        sendSimpleMessage("covid19@drk-hannover.de", "CovidTests D", builder.toString());
     }
 
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })

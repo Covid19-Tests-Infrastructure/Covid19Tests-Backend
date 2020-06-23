@@ -19,8 +19,9 @@ public class DefaultFormDto {
 	public String phoneNumber;
 	@NonNull
 	public AddressDto address;
-	public String insuranceType;
+	public String editor;
 	public boolean mobile;
-	public AddressDto mobileAddress;
+	public String testAddressNote;
+	public String contactSeverity;
 	public String comment;
 }

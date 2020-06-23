@@ -97,7 +97,7 @@ public class FormController {
         builder.append("PatientAddressNote: " + formContent.testAddressNote + "\n");
         builder.append("Editor: " + formContent.editor + "\n");
         builder.append("ContactSeverity: " + formContent.contactSeverity + "\n");
-        sendSimpleMessage("covid19@drk-hannover.de", "CovidTests D", builder.toString());
+        sendSimpleMessage("covid19@drk-hannover.de", "CovidTests Default", builder.toString());
     }
 
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })

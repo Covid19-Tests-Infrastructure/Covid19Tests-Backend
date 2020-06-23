@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import de.drkhannover.tests.api.conf.ControllerPath;
+import de.drkhannover.tests.api.form.dto.DefaultFormDto;
 import de.drkhannover.tests.api.form.dto.FormKvnDto;
 import de.drkhannover.tests.api.form.dto.FormKvnDto.PatientDto;
 import de.drkhannover.tests.api.user.IUserService;
@@ -62,6 +63,39 @@ public class FormController {
         builder.append("PatientInsuranceType: " + patient.insuranceType + "\n");
         builder.append("PatientMobilityState: " + patient.mobile + "\n");
         sendSimpleMessage("covid19@drk-hannover.de", "CovidTests Privat", builder.toString());
+    }
+
+    @Operation(security = { @SecurityRequirement(name = "bearer-key") })
+    @PutMapping(ControllerPath.FORMULAR_DEFAULT)
+    public void addFormularDefault(@RequestBody @Nonnull @NotNull @Valid DefaultFormDto formContent, Authentication auth) {
+        var user = userService.findUserByUsername((String) auth.getPrincipal());
+        if (user.getProfileConfiguration().getFacility() == null) {
+            throw new Error("User has no facility");
+        }
+        var conf = user.getProfileConfiguration();
+        var builder = new StringBuilder();
+        builder.append("FacilityNr: " + user.getProfileConfiguration().getFacility() + "\n");
+        builder.append("OrdererFirstName: " + conf.firstlame + "\n");
+        builder.append("OrdererLastName: " + conf.lastname + "\n");
+        builder.append("OrdererStreet: " + conf.addressStreet+ "\n");
+        builder.append("OrdererHnumber: " + conf.addressHnumber+ "\n");
+        builder.append("OrdererZip: " + conf.addressZip + "\n");
+        builder.append("OrdererOrt: " + conf.addressOrt+ "\n");
+        builder.append("OrdererPhoneNumber: " + conf.phoneNumber + "\n");
+        builder.append("OrdererFax: " + conf.fax + "\n");
+        builder.append("OrdererEmail: " + conf.email + "\n");
+        builder.append("PatientVorname: " + formContent.firstname + "\n");
+        builder.append("PatientLastname: " + formContent.lastname + "\n");
+        builder.append("PatientGender: " + formContent.gender.name() + "\n");
+        builder.append("PatientBday: " + formContent.bday + "\n");
+        builder.append("PatientStreet: " + formContent.address.street + "\n");
+        builder.append("PatientHnumber: " + formContent.address.hnumber + "\n");
+        builder.append("PatientZip: " + formContent.address.zip + "\n");
+        builder.append("PatientOrt: " + formContent.address.ort + "\n");
+        builder.append("PatientPhoneNumber: " + formContent.phoneNumber + "\n");
+        builder.append("PatientInsuranceType: " + formContent.insuranceType + "\n");
+        builder.append("PatientMobilityState: " + formContent.mobile + "\n");
+        sendSimpleMessage("covid19@drk-hannover.de", "CovidTests Default", builder.toString());
     }
 
     @Operation(security = { @SecurityRequirement(name = "bearer-key") })

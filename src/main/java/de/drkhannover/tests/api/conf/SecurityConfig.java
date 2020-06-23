@@ -49,7 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers(ControllerPath.AUTHENTICATION_AUTH).permitAll()
             .antMatchers(ControllerPath.USERS_PREFIX).hasAuthority(UserRole.ADMIN.name()) // admin: allowed to add users
             .antMatchers(ControllerPath.AUTHENTICATION_CHECK).permitAll()
-            .antMatchers(ControllerPath.FORMULAR_PRIVATE).hasAnyAuthority(UserRole.ADMIN.name(), UserRole.DEFAULT.name())
+            .antMatchers(ControllerPath.FORMULAR_PRIVATE).hasAnyAuthority(UserRole.ADMIN.name(), UserRole.PRIVATE.name())
+            .antMatchers(ControllerPath.FORMULAR_DEFAULT).hasAnyAuthority(UserRole.ADMIN.name(), UserRole.DEFAULT.name())
             .antMatchers(ControllerPath.FORMULAR_KVN).hasAnyAuthority(UserRole.ADMIN.name(), UserRole.KVN.name())
             .antMatchers("/**").authenticated()
             //.antMatchers("/**").permitAll()//maybe remove later

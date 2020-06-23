@@ -6,8 +6,9 @@ public class ControllerPath {
     public static final String SWAGGER = "swagger-ui.html";
     
     public static final String FORMULAR_PREFIX = GLOBAL_PREFIX + "/form";
-    public static final String FORMULAR_PRIVATE = FORMULAR_PREFIX + "/default";
+    public static final String FORMULAR_PRIVATE = FORMULAR_PREFIX + "/private";
     public static final String FORMULAR_KVN = FORMULAR_PREFIX + "/kvn";
+    public static final String FORMULAR_DEFAULT = FORMULAR_PREFIX + "/default";
     
     public static final String PRICE_GET = FORMULAR_PREFIX + "/price";
     

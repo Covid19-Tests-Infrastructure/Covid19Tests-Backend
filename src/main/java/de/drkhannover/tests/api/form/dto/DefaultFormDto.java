@@ -24,4 +24,7 @@ public class DefaultFormDto {
 	public String testAddressNote;
 	public String contactSeverity;
 	public String comment;
+	public String healthCareOrganisationNumber;
+	public String personalHealthCareNumber;
+	public String insuranceType;
 }

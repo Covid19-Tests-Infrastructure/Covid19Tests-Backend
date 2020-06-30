@@ -95,6 +95,9 @@ public class FormController {
         builder.append("PatientPhoneNumber: " + formContent.phoneNumber + "\n");
         builder.append("PatientMobilityState: " + formContent.mobile + "\n");
         builder.append("PatientAddressNote: " + formContent.testAddressNote + "\n");
+        builder.append("PatientHealthCareOrganisation: " + formContent.healthCareOrganisationNumber + "\n");
+        builder.append("PatientHealthCareNumber: " + formContent.personalHealthCareNumber + "\n");
+        builder.append("PatientInsuranceType: " + formContent.insuranceType + "\n");
         builder.append("Editor: " + formContent.editor + "\n");
         builder.append("Comment: " + formContent.comment + "\n");
         builder.append("ContactSeverity: " + formContent.contactSeverity + "\n");
